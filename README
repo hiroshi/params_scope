@@ -1,0 +1,29 @@
+ParamsScope
+===========
+
+This plugin define ActiveRecord::Base#params_scope(params, options = {}).
+
+Example
+=======
+
+ class User < ActiveRecord::Base
+   named_scope :age, lambda{|age| {:conditions => ["age = ?", age]}}
+   named_scope :city, lambda{|city| {:conditions => ["city = ?", city]}}
+   named_scope :closed, lambda{|closed| {:conditions => ["closed = ?", closed]}}
+ end
+ 
+ class UsersController < ApplicationController
+   def index
+     # params may be {:age => 30, :city => "Tokyo"}
+     @users = User.params_scope(params).find(:all, :defaults => {:closed => false})
+     # => User.closed(false).closed(false).age(30).city("Tokyo").find(:all)
+   end
+ end
+
+TODOs
+=======
+* Write TESTs
+* Implicit scoping: If a given key is the name of a column, use it as a dynamic scope
+* Support range paramaters in some ways.
+
+Copyright (c) 2009 Hiroshi Saito (yakitara.com), released under the MIT license
