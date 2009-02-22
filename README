@@ -22,7 +22,6 @@ Example
 
 TODOs
 =======
-* Write TESTs
 * Implicit scoping: If a given key is the name of a column, use it as a dynamic scope
 * Support range paramaters in some ways.
 
