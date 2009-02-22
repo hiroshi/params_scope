@@ -1,7 +1,7 @@
 ParamsScope
 ===========
 
-This plugin define ActiveRecord::Base#params_scope(params, options = {}).
+This plugin defines ActiveRecord::Base#params_scope(params, options = {}).
 
 Example
 =======
