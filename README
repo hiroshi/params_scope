@@ -1,24 +1,30 @@
 ParamsScope
 ===========
 
-This plugin defines ActiveRecord::Base#params_scope(params, options = {}).
+This plugin defines ActiveRecord::Base#params_scope(params, options = {}) and
+some other relatives.
 
-Example
+Examples
 =======
 
  class User < ActiveRecord::Base
    named_scope :age, lambda{|age| {:conditions => ["age = ?", age]}}
    named_scope :city, lambda{|city| {:conditions => ["city = ?", city]}}
    named_scope :closed, lambda{|closed| {:conditions => ["closed = ?", closed]}}
+   named_order_scope :order
  end
  
  class UsersController < ApplicationController
    def index
-     # params may be {:age => 30, :city => "Tokyo"}
+     # params may be {:age => "30", :city => "Tokyo"}
      @users = User.params_scope(params).find(:all, :defaults => {:closed => false})
      # => User.closed(false).closed(false).age(30).city("Tokyo").find(:all)
    end
  end
+
+
+ User.params_scope(:order => ["age", "asc", "updated_at, "desc"]).find(:all)
+ # => User.find(:all, :order => "age ASC, updated_at DESC")
 
 TODOs
 =======

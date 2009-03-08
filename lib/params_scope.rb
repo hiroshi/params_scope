@@ -18,13 +18,35 @@ module ParamsScope
   end
 
   module ClassMethods
+    # Defines a named_scope to deal with a param like that :order => ["updated_at", "desc", "id", "asc"].
+    # You can use this with like following view:
+    #   <%= select_tag "order[]", options_for_select([:id, :updated_at]) %>
+    #   <%= select_tag "order[]", options_for_select([:asc, :desc]) %><br/>
+    #   <%= select_tag "order[]", options_for_select([:id, :updated_at]) %>
+    #   <%= select_tag "order[]", options_for_select([:asc, :desc]) %>
+    def named_order_scope(name)
+      named_scope name, lambda {|orders|
+        {
+          :order => orders.in_groups_of(2).map do |key, order|
+            case order
+            when /asc/i
+              "#{key} ASC"
+            when /desc/i
+              "#{key} DESC"
+            end
+          end.join(", ")
+        }
+      }
+    end
+
     # optins:
     #  defaults: specify default value for keys if there are no value for the keys
     def params_scope(params, options={})
       params = params.symbolize_keys.reverse_merge(options[:defaults] || {})
+      # chaining params scopes
       self.scopes.keys.inject(self) do |ret, scope_name|
         if (value = params[scope_name]) && !value.blank?
-          ret.send(scope_name, *value)
+          ret.send(scope_name, value)
         else
           ret
         end
