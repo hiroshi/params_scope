@@ -17,7 +17,7 @@ class ParamsScopeTest < ActiveSupport::TestCase
   test "named_order_scope" do
     params = {:order => ["updated_at", "desc", "id", "asc"]}
     sql = Thing.params_scope(params).send(:construct_finder_sql, {})
-    assert_equal "SELECT * FROM \"things\"  ORDER BY updated_at DESC, id ASC", sql
+    assert_equal "SELECT * FROM \"things\"  ORDER BY things.updated_at DESC, things.id ASC", sql
 
 #     params = {:order => [:order_by_bar, :order_by_foo]}
 #     sql = Thing.params_scope(params).send(:construct_finder_sql, {})

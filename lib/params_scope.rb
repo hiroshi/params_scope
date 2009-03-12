@@ -30,9 +30,9 @@ module ParamsScope
           :order => orders.in_groups_of(2).map do |key, order|
             case order
             when /asc/i
-              "#{key} ASC"
+              "#{self.table_name}.#{key} ASC"
             when /desc/i
-              "#{key} DESC"
+              "#{self.table_name}.#{key} DESC"
             end
           end.join(", ")
         }
